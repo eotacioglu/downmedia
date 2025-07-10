@@ -75,39 +75,39 @@ public class DownmediaPlugin: NSObject, FlutterPlugin {
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("iOS " + UIDevice.current.systemVersion)
-
-    case "downMedia":
-      guard let args = call.arguments as? [Any],
-            let data = args[0] as? FlutterStandardTypedData,
-            let mediaName = args[1] as? String else {
-        result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments for downMedia", details: nil))
-        return
-      }
-
-      saveFile(data: data.data, mediaName: mediaName, result: result)
-
-    default:
-      result(FlutterMethodNotImplemented)
+public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+  switch call.method {
+  case "getPlatformVersion":
+    result("iOS " + UIDevice.current.systemVersion)
+  case "downMedia":
+    guard let args = call.arguments as? [Any],
+          let data = args[0] as? FlutterStandardTypedData,
+          let mediaName = args[1] as? String else {
+      result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments", details: nil))
+      return
     }
+
+    saveFile(data: data.data, mediaName: mediaName, result: result)
+  default:
+    result(FlutterMethodNotImplemented)
   }
+}
 
-  private func saveFile(data: Data, mediaName: String, result: FlutterResult) {
-    do {
-      // Documents dizin yolunu al
-      let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-      let filePath = (documentsPath as NSString).appendingPathComponent(mediaName)
+private func saveFile(data: Data, mediaName: String, result: FlutterResult) {
+  do {
+    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    let fileURL = URL(fileURLWithPath: documentsPath).appendingPathComponent(mediaName)
 
-      // Dosyayı yaz
-      try data.write(to: URL(fileURLWithPath: filePath))
+    print("Dosya yazılacak path: \(fileURL.path)")
 
-      // İstersen dosya yolunu dönebilirsin
-      result(filePath)
-    } catch {
-      result(FlutterError(code: "WRITE_ERROR", message: "Failed to write file: \(error.localizedDescription)", details: nil))
-    }
+    try data.write(to: fileURL)
+    print("Dosya başarıyla yazıldı.")
+
+    result(fileURL.path)
+  } catch {
+    print("Dosya yazılırken hata: \(error)")
+    result(FlutterError(code: "WRITE_ERROR", message: "Failed to write file: \(error.localizedDescription)", details: nil))
   }
+}
+
 }
