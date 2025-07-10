@@ -77,36 +77,32 @@ public class DownmediaPlugin: NSObject, FlutterPlugin {
 
 public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
   switch call.method {
-  case "getPlatformVersion":
-    result("iOS " + UIDevice.current.systemVersion)
   case "downMedia":
-    guard let args = call.arguments as? [Any],
-          let data = args[0] as? FlutterStandardTypedData,
-          let mediaName = args[1] as? String else {
+    guard let args = call.arguments as? [String: Any],
+          let data = args["data"] as? FlutterStandardTypedData,
+          let mediaName = args["mediaName"] as? String else {
       result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments", details: nil))
       return
     }
 
-    saveFile(data: data.data, mediaName: mediaName, result: result)
+    // Burada data.data ile ByteData alırsın
+    let bytes = data.data
+
+    // Dosya yazma işlemi
+    let fileManager = FileManager.default
+    let tempDir = NSTemporaryDirectory()
+    let filePath = (tempDir as NSString).appendingPathComponent(mediaName)
+
+    do {
+      try bytes.write(to: URL(fileURLWithPath: filePath))
+      // İstersen burada paylaş veya başka işlemler yapabilirsin
+      result(nil)
+    } catch {
+      result(FlutterError(code: "WRITE_ERROR", message: "Failed to write file: \(error.localizedDescription)", details: nil))
+    }
+
   default:
     result(FlutterMethodNotImplemented)
-  }
-}
-
-private func saveFile(data: Data, mediaName: String, result: FlutterResult) {
-  do {
-    let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    let fileURL = URL(fileURLWithPath: documentsPath).appendingPathComponent(mediaName)
-
-    print("Dosya yazılacak path: \(fileURL.path)")
-
-    try data.write(to: fileURL)
-    print("Dosya başarıyla yazıldı.")
-
-    result(fileURL.path)
-  } catch {
-    print("Dosya yazılırken hata: \(error)")
-    result(FlutterError(code: "WRITE_ERROR", message: "Failed to write file: \(error.localizedDescription)", details: nil))
   }
 }
 
