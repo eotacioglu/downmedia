@@ -1,7 +1,7 @@
 name: downmedia
 description: "Media download plugin"
 version: 0.0.4
-homepage: ''
+homepage: 'https://github.com/eotacioglu/downmedia'
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
