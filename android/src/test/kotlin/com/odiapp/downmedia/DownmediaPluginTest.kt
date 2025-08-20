@@ -1,4 +1,4 @@
-package com.odiapp.downmedia.downmedia
+package com.odiapp.downmedia
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

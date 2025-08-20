@@ -1,7 +1,7 @@
 name: downmedia
 description: "Media download plugin"
 version: 0.0.4
-#homepage:
+homepage: ''
 
 environment:
   sdk: '>=3.2.6 <4.0.0'
@@ -37,7 +37,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.odiapp.downmedia.downmedia
+        package: com.odiapp.downmedia
         pluginClass: DownmediaPlugin
       ios:
         pluginClass: DownmediaPlugin

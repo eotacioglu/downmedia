@@ -33,7 +33,7 @@
 //    channel.setMethodCallHandler(null)
 //  }
 //}
-package com.odiapp.downmedia.downmedia
+package com.odiapp.downmedia
 
 import android.content.Context
 import android.os.Environment

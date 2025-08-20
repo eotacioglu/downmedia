@@ -1,6 +1,6 @@
 
 
-group 'com.odiapp.downmedia.downmedia'
+group 'com.odiapp.downmedia'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -28,7 +28,7 @@ apply plugin: 'kotlin-android'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'com.odiapp.downmedia.downmedia'
+        namespace 'com.odiapp.downmedia'
     }
 
     compileSdkVersion 33
